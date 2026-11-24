@@ -1,0 +1,29 @@
+{
+  "parent": "faunapedia:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:book",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.faunapedia.completion_25.title"
+    },
+    "description": {
+      "translate": "advancements.faunapedia.completion_25.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ]
+}

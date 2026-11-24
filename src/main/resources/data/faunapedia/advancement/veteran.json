@@ -1,0 +1,29 @@
+{
+  "parent": "faunapedia:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:clock",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.faunapedia.veteran.title"
+    },
+    "description": {
+      "translate": "advancements.faunapedia.veteran.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ]
+}

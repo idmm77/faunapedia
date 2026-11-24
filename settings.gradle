@@ -1,0 +1,17 @@
+// settings.gradle — configuration racine du projet Gradle (déclare les dépôts de plugins).
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        // Dépôt Maven officiel de NeoForge (héberge le plugin ModDevGradle et NeoForge lui-même).
+        maven { url = 'https://maven.neoforged.net/releases' }
+    }
+}
+
+plugins {
+    // Permet à Gradle de télécharger automatiquement un JDK 21 si aucun n'est trouvé sur la machine
+    // (« toolchain » = boîte à outils Java utilisée pour compiler, ici imposée en version 21).
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'faunapedia'

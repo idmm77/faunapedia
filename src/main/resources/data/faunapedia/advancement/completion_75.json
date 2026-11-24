@@ -1,0 +1,29 @@
+{
+  "parent": "faunapedia:completion_50",
+  "display": {
+    "icon": {
+      "id": "minecraft:enchanted_book",
+      "count": 1
+    },
+    "title": {
+      "translate": "advancements.faunapedia.completion_75.title"
+    },
+    "description": {
+      "translate": "advancements.faunapedia.completion_75.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ]
+}

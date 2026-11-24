@@ -1,0 +1,28 @@
+# --- Gradle / build ---
+.gradle/
+build/
+
+# --- Environnement de dev (jars d'autres mods, mondes, logs, configs générées) ---
+# NE PAS committer : run/mods contient des jars tiers sous copyright.
+run/
+
+# --- Config locale Claude Code ---
+.claude/
+
+# --- Doc de reprise interne : NON publiée (contient des chemins machine, nom d'utilisateur) ---
+HANDOFF.md
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+*.launch
+bin/
+out/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

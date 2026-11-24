@@ -1,0 +1,100 @@
+// build.gradle — script de construction principal (utilise ModDevGradle, le plugin officiel NeoForge).
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'eclipse'
+    // ModDevGradle : gère le téléchargement de NeoForge/Minecraft, la génération des configs de run, etc.
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+// Force la compilation et l'exécution en Java 21 (imposé par Minecraft 1.21.1 / NeoForge).
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+repositories {
+    mavenLocal()
+    // Dépôt de JEI (Just Enough Items). Utilisé uniquement pour son API, à la compilation.
+    maven {
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com/'
+    }
+}
+
+neoForge {
+    // Version de NeoForge à utiliser (lue depuis gradle.properties).
+    version = neo_version
+
+    // Déclare le mod auprès du plugin pour que ses classes soient chargées dans l'environnement de dev.
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+
+    // Configurations de lancement disponibles via ./gradlew runClient et ./gradlew runServer.
+    runs {
+        client {
+            client()
+            // Nom de joueur par défaut en dev, pratique pour tester la persistance par joueur.
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+}
+
+dependencies {
+    // API de JEI, en compileOnly : le mod se COMPILE contre elle mais ne l'embarque pas et ne
+    // l'exige pas à l'exécution. JEI reste facultatif — tout le code qui le touche est isolé dans
+    // le paquet `compat` et n'est atteint qu'après vérification que le mod est chargé.
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+}
+
+// Remplace les variables ${...} dans les fichiers de métadonnées lors de la copie des ressources
+// (permet de garder une seule source de vérité pour les versions dans gradle.properties).
+tasks.named('processResources', ProcessResources).configure {
+    // UTF-8 explicite : les fichiers contiennent des accents et des tirets longs.
+    filteringCharset = 'UTF-8'
+
+    var replaceProperties = [
+            minecraft_version   : minecraft_version,
+            neo_version_range   : neo_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : mod_id,
+            mod_name            : mod_name,
+            mod_license         : mod_license,
+            mod_version         : mod_version,
+            mod_authors         : mod_authors,
+            // mod_description n'est plus une variable : il est en littéral dans neoforge.mods.toml,
+            // pour que ses accents survivent (gradle.properties est lu en ISO-8859-1).
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+        // Substitution purement littérale, ligne par ligne.
+        // (On n'utilise volontairement PAS expand() : celui-ci fait passer le fichier par le moteur
+        // de templates Groovy, qui tente d'interpréter le contenu et échoue sur des caractères
+        // parfaitement légitimes en TOML.)
+        filter { String line ->
+            String result = line
+            replaceProperties.each { key, value ->
+                result = result.replace('${' + key + '}', value.toString())
+            }
+            return result
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

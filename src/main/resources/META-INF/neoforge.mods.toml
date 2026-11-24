@@ -1,0 +1,33 @@
+# neoforge.mods.toml — métadonnées du mod lues par le loader NeoForge (FML) au démarrage.
+# Les ${...} sont remplacés au build par la tâche processResources (voir build.gradle).
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+# Description en littéral (et non via une variable) : gradle.properties est lu en ISO-8859-1, ce qui
+# corromprait les accents. Ce fichier-ci est filtré en UTF-8 (voir processResources), les accents y
+# sont donc sûrs.
+description='''
+Une encyclopédie vivante qui répertorie tous les mobs (vanilla comme ajoutés par d'autres mods) rencontrés en jeu.
+'''
+
+# Dépendance obligatoire envers NeoForge lui-même.
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+versionRange="${neo_version_range}"
+ordering="NONE"
+side="BOTH"
+
+# Dépendance obligatoire envers Minecraft (version exacte).
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="[${minecraft_version}]"
+ordering="NONE"
+side="BOTH"
